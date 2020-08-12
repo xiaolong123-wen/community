@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
-<html>
-<!--xmlns:th="http://www.thymeleaf.org"-->
+<html xmlns:th="http://www.thymeleaf.org">
+<!---->
 <head>
     <title>论文收割机</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
@@ -17,9 +17,9 @@
 <!--        左侧导航栏-->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">码匠社区</span>
+                <span class="sr-only">论文收割机</span>
             </button>
-            <a class="navbar-brand" href="#">码匠社区</a>
+            <a class="navbar-brand" href="#">论文收割机</a>
         </div>
 <!--        右侧导航栏-->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -31,16 +31,21 @@
             </form>
 <!--            使用github账户登录,参考了API文档,首先注册了app,申请了账户,得到了ID等-->
 <!--            根据需要的参数在登录连接中声明.-->
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="https://github.com/login/oauth/authorize?client_id=f27d3b36d26303bfc137&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我<span class="caret"></span></a>
+            <ul class="nav navbar-nav navbar-right" >
+<!--                逻辑时使用模板来判断一下我们的状态,如果我们没有用户登录显示登录,登录后只显示个人账户-->
+                <li class="dropdown"  th:if="${session.user != null}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">liwenlong<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">消息中心</a></li>
                         <li><a href="#">个人资料</a></li>
                         <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
+                 <li th:if="${session.user == null}">
+                     <a href="https://github.com/login/oauth/authorize?client_id=f27d3b36d26303bfc137
+                     &redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                 </li>
             </ul>
         </div>
     </div>
