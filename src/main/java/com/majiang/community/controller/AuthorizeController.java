@@ -5,14 +5,14 @@ import com.majiang.community.dto.GithubUser;
 import com.majiang.community.mapper.UserMapper;
 import com.majiang.community.model.User;
 import com.majiang.community.provider.GithubProvider;
-import org.h2.api.UserToRolesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 /*cookie 和session理解
@@ -28,7 +28,6 @@ public class AuthorizeController {
     private GithubProvider githubProvider;
     @Autowired
     private UserMapper userMapper;
-
 //原理时spring启动的时候,回去读取properties配置文件,将k-v对读到一个map里,等到用的时候直接赋值.
     @Value("${github.client_id}")
     private  String client_id;
@@ -36,11 +35,11 @@ public class AuthorizeController {
     private  String client_secert;
     @Value("${github.Redirect_uri}")
     private  String client_Redirect_uri;
-
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request){
+                           HttpServletRequest request,
+                           HttpServletResponse response){
 //        spring自动把上下文中的request放到这里面使用
         AccessTokenDto accessTokenDto = new AccessTokenDto();
         accessTokenDto.setClient_id(client_id);
@@ -55,14 +54,16 @@ public class AuthorizeController {
         if (githubUser!=null){
 //          获取到user信息后存入数据库，使用user对象，
             User user=new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token=UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(githubUser.getName());
             user.setAcccontId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
+//            上述数据库相当于写入实物session.返回浏览器设置cookie,
+            response.addCookie(new Cookie("token",token));
 //          登录成功写cookie,session
-            request.getSession().setAttribute("user",githubUser);  //获取session设置账户信息,将user存储到session中.有了银行卡
             return "redirect:/"; //登录成功后重定向到index页面
         }
         else{

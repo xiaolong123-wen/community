@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<!---->
+<head>
+    <title>论文收割机</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<!--导航栏-->
+<ul class="nav nav-pills"></ul>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!--        左侧导航栏-->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">论文收割机</span>
+            </button>
+            <a class="navbar-brand" href="#">论文收割机</a>
+        </div>
+        <!--        右侧导航栏-->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="搜索论文">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <!--            使用github账户登录,参考了API文档,首先注册了app,申请了账户,得到了ID等-->
+            <!--            根据需要的参数在登录连接中声明.-->
+            <ul class="nav navbar-nav navbar-right" >
+                <!--                逻辑时使用模板来判断一下我们的状态,如果我们没有用户登录显示登录,登录后只显示个人账户-->
+                <li class="dropdown"  th:if="${session.user != null}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">liwenlong<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">消息中心</a></li>
+                        <li><a href="#">个人资料</a></li>
+                        <li><a href="#">退出登录</a></li>
+                    </ul>
+                </li>
+                <li th:if="${session.user == null}">
+                    <a href="https://github.com/login/oauth/authorize?client_id=f27d3b36d26303bfc137
+                     &redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+<!--            设置页面，大于这些阈值的时候就水平，但是如果页面缩小，这里设置占满-->
+            <div class="col-lg-9 col-md-12 col-sm-12">
+                <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
+                <hr>
+                <form action="/publish" method="post">
+                    <div class="form-group">
+                        <label for="title">论文标题:</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="论文标题" >
+                    </div>
+                    <div class="form-group">
+                        <label for="title">论文概述(使用方法):</label>
+                        <textarea class="form-control" name="description" id="descripion" cols="30" rows="30"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">创新点:</label>
+                        <input type="text" class="form-control" id="create" name="create" placeholder="输入主要创新点">
+                    </div>
+                    <button type="submit" class="btn btn-serve">保存</button>
+                </form>
+            </div>
+            <div class="col-lg-3 col-md-12 col-sm-12">
+                <h3>论文提交指南</h3>
+                • 论文标题: 发布的您论文的名字<br>
+                • 论文概述: 详细论述该论文主要的方法，并提供一些相关的资料<br>
+                • 创新点: 写一个或多个该论文的创新点用逗号隔开<br>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

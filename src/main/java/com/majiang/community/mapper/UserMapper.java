@@ -3,6 +3,7 @@ package com.majiang.community.mapper;
 import com.majiang.community.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 //类和类之间传输用dto,数据库的传输使用model
@@ -14,5 +15,6 @@ public interface UserMapper{
     @Insert("insert into user (name,account_id,token,gmt_create,gmt_modified) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
     void insert(User user);
 
-
+    @Select("select * from user where token = #{token}")
+    User findByToken(String token);
 }
