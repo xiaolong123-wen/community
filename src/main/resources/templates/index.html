@@ -1,18 +1,19 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html  xmlns:th="http://www.thymeleaf.org">
 <!---->
 <head>
     <title>论文收割机</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/community.css">
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body>
 <!--导航栏-->
 <ul class="nav nav-pills"></ul>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default ">
     <div class="container-fluid">
 <!--        左侧导航栏-->
         <div class="navbar-header">
@@ -23,16 +24,18 @@
         </div>
 <!--        右侧导航栏-->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<!--            搜索功能-->
             <form class="navbar-form navbar-left">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="搜索论文">
                 </div>
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
+            <!--            根据需要的参数在登录连接中声明.-->
+
 <!--            使用github账户登录,参考了API文档,首先注册了app,申请了账户,得到了ID等-->
-<!--            根据需要的参数在登录连接中声明.-->
             <ul class="nav navbar-nav navbar-right" >
-<!--                逻辑时使用模板来判断一下我们的状态,如果我们没有用户登录显示登录,登录后只显示个人账户-->
+                <!--                逻辑时使用模板来判断一下我们的状态,如果我们没有用户登录显示登录,登录后只显示个人账户-->
                 <li class="dropdown"  th:if="${session.user != null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">liwenlong<span class="caret"></span></a>
@@ -42,13 +45,52 @@
                         <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
-                 <li th:if="${session.user == null}">
-                     <a href="https://github.com/login/oauth/authorize?client_id=f27d3b36d26303bfc137
+                <li th:if="${session.user == null}">
+                    <a href="https://github.com/login/oauth/authorize?client_id=f27d3b36d26303bfc137
                      &redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
-                 </li>
+                </li>
             </ul>
+            <!--       登录成功后添加发布链接-->
+            <ul class="nav navbar-nav navbar-right" >
+                <li class="dropdown"   th:if="${session.user != null}">
+                    <a href="/publish" >发布</a>
+                </li>
+            </ul>
+
         </div>
     </div>
 </nav>
+<div class="container-fluid main" >
+    <div class="row">
+        <!--            设置页面，大于这些阈值的时候就水平，但是如果页面缩小，这里设置占满-->
+        <!--       保存论文页面左侧表单-->
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class=" glyphicon glyphicon-list " aria-hidden="true"></span>  发现</h2>
+            <hr>
+            <!--            显示提交论文的基本信息-->
+            <div class="media" th:each="question: ${questions}">
+                <div class="media-left">
+                    <a href="#">
+                        <img  class="avatar-url img-circle "  src="https://avatars1.githubusercontent.com/oa/1353308?s=240&u=6e93a54edca4f505fa0b0bb0168585942ea5c5ef&v=4"/>
+<!--                        <img  class="avatar-url img-circle "   th:src="@{question.user.avatarurl}"/>-->
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <span th:text="${question.description}"></span><br>
+                    <span class="text-desc">
+                        <span th:text="${question.commentCount}"></span>个回复，
+                        <span th:text="${question.viewCount}"></span>次浏览，
+                        <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!--       保存论文页面右侧表单 -->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3>重点论文</h3>
+        </div>
+    </div>
+</div>
 </body>
 </html>

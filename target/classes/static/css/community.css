@@ -1,0 +1,20 @@
+body {
+    background-color:#efefef;
+}
+.main{
+    margin: 30px;
+    background-color:white;
+}
+.btn-publish{
+    float: right;
+    margin-bottom: 15px;
+}
+.avatar-url{
+    width: 45px;
+    height:45px;
+}
+.text-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}

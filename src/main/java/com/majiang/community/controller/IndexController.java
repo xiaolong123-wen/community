@@ -1,16 +1,19 @@
 package com.majiang.community.controller;
 
+
+import com.majiang.community.dto.QuestionDTO;
 import com.majiang.community.mapper.UserMapper;
 import com.majiang.community.model.User;
-import org.apache.catalina.mbeans.UserMBean;
-import org.h2.api.UserToRolesMapper;
+import com.majiang.community.service.QuestionService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /*通篇阅读文档即可了解使用的整个过程，spirng官网。
 *spring提供了一个model,将信息传递到页面中.map形式存储数据，
@@ -19,13 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 * */
 @Controller
 public class IndexController {
+
      @Autowired
     private UserMapper userMapper;
+     @Autowired
+     private QuestionService questionService;
+
     @GetMapping("/")
-    public String index(HttpServletRequest request){
-//请求cookie用request的getcookie,获取.
+    public String index(HttpServletRequest request, Model model){
+//请求cookie用request的getcookie,获取登录信息.
         Cookie[] cookies=request.getCookies();
-        if (cookies !=null){
+        if (cookies !=null && cookies.length !=0 ){
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {  //得到了名字token
                     String token = cookie.getValue();//获取cookie中的token.
@@ -39,6 +46,10 @@ public class IndexController {
                 }
             }
         }
+//返回表现层，这里是要取得用户发布的问题的信息.
+        List<QuestionDTO> questionlist=questionService.list();
+//返回到前端，前端页面循环显示.
+        model.addAttribute("questions",questionlist);
         return "index";
     }
 
