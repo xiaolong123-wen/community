@@ -1,6 +1,7 @@
 package com.majiang.community.controller;
 
 
+import com.majiang.community.dto.PageinationDTO;
 import com.majiang.community.dto.QuestionDTO;
 import com.majiang.community.mapper.UserMapper;
 import com.majiang.community.model.User;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -29,7 +32,13 @@ public class IndexController {
      private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request, Model model){
+    public String index(HttpServletRequest request, Model model,
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "5") Integer size
+//                        @RequestParam(name = "search", required = false) String search,
+//                        @RequestParam(name = "tag", required = false) String tag,
+//                        @RequestParam(name = "sort", required = false) String sort
+    ){
 //请求cookie用request的getcookie,获取登录信息.
         Cookie[] cookies=request.getCookies();
         if (cookies !=null && cookies.length !=0 ){
@@ -47,9 +56,9 @@ public class IndexController {
             }
         }
 //返回表现层，这里是要取得用户发布的问题的信息.
-        List<QuestionDTO> questionlist=questionService.list();
+        PageinationDTO pagination=questionService.list(page,size);
 //返回到前端，前端页面循环显示.
-        model.addAttribute("questions",questionlist);
+        model.addAttribute("pagination",pagination);
         return "index";
     }
 
