@@ -43,7 +43,8 @@ public class PublishController {
             @RequestParam(value = "id",required = false) Long id,
             HttpServletRequest request,
             Model model){
-//        一般在前端来做逻辑判断，这里在服务层，为model添加属性，判断后在前端提示错误信息，前端页面中"${}"来获取s的值，表示有错误信息传到了前端页面。addattribute的作用就是前端提交信息。
+//        一般在前端来做逻辑判断，这里在服务层，为model添加属性，判断后在前端提示错误信息，前端页面中"${}"来获取s的值，表示有错误信息传到了前端页面。
+//        addattribute的作用就是前端提交信息。
         model.addAttribute("title" ,title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);

@@ -1,12 +1,10 @@
 package com.majiang.community.controller;
 
 
-import com.majiang.community.dto.PageinationDTO;
-import com.majiang.community.dto.QuestionDTO;
+import com.majiang.community.dto.PaginationDTO;
 import com.majiang.community.mapper.UserMapper;
 import com.majiang.community.model.User;
 import com.majiang.community.service.QuestionService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 /*通篇阅读文档即可了解使用的整个过程，spirng官网。
 *spring提供了一个model,将信息传递到页面中.map形式存储数据，
@@ -56,7 +52,7 @@ public class IndexController {
             }
         }
 //返回表现层，这里是要取得用户发布的问题的信息.
-        PageinationDTO pagination=questionService.list(page,size);
+        PaginationDTO pagination=questionService.list(page,size);
 //返回到前端，前端页面循环显示.
         model.addAttribute("pagination",pagination);
         return "index";

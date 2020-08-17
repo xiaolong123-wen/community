@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:fragment="nav">
+    <!--导航栏-->
+    <ul class="nav nav-pills"></ul>
+    <nav class="navbar navbar-default ">
+        <div class="container-fluid">
+            <!--        左侧导航栏-->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">论文收割机</span>
+                </button>
+                <a class="navbar-brand" href="/">论文收割机</a>
+            </div>
+            <!--        右侧导航栏-->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <!--            搜索功能-->
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜索论文">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <!--            根据需要的参数在登录连接中声明.-->
+
+                <!--            使用github账户登录,参考了API文档,首先注册了app,申请了账户,得到了ID等-->
+                <ul class="nav navbar-nav navbar-right" >
+                    <!--                逻辑时使用模板来判断一下我们的状态,如果我们没有用户登录显示登录,登录后只显示个人账户-->
+                    <li class="dropdown"  th:if="${session.user != null}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            <span th:text="${session.user.getName()}"></span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/profile/questions">我的论文</a></li>
+                            <li><a href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${session.user == null}">
+                        <a href="https://github.com/login/oauth/authorize?client_id=f27d3b36d26303bfc137
+                     &redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                    </li>
+                </ul>
+                <!--       登录成功后添加发布链接-->
+                <ul class="nav navbar-nav navbar-right" >
+                    <li class="dropdown"   th:if="${session.user != null}">
+                        <a href="/publish" >发布</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+</div>
+
+</body>
+
+</html>

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PageinationDTO {
+public class PaginationDTO {
     public List<QuestionDTO>  questions;
     private boolean showPrevious;
     private boolean showFirstPage;
@@ -16,21 +16,10 @@ public class PageinationDTO {
     private List<Integer> pages = new ArrayList<>();
     private Integer totalPage;
 
-
-    public void setPaginaton(Integer totalCount, Integer page,Integer size) {
-        if(totalCount % size == 0){
-            totalPage = totalCount / size;
-        }else {
-            totalPage = totalCount / size + 1;
-        }
-
-        if (page <1){
-            page =1 ;
-        }
-        if(page >totalPage){
-            page =totalPage;
-        }
+//处理页码逻辑
+    public void setPagination(Integer totalPage, Integer page) {
         this.page =page;
+        this.totalPage=totalPage;
 
         pages.add(page);
         for (int i = 1; i <= 3; i++) {
