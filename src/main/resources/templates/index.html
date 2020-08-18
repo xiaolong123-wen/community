@@ -16,7 +16,6 @@
 <!--首页显示表单-->
 <div class="container-fluid main" >
     <div class="row">
-        <!--            设置页面，大于这些阈值的时候就水平，但是如果页面缩小，这里设置占满-->
         <!--       保存论文页面左侧表单-->
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span class=" glyphicon glyphicon-list " aria-hidden="true"></span>  发现</h2>
@@ -29,7 +28,10 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <h4 class="media-heading">
+                        <a  th:text="${question.title}" th:href="@{'question/'+${question.id}}"></a>
+                    </h4>
+<!--                    a标签放论文题目，点击链接跳转，跳转到question页面，带着id -->
                     <span th:text="${question.description}"></span><br>
                     <span class="text-desc">
                         <span th:text="${question.commentCount}"></span>个回复，

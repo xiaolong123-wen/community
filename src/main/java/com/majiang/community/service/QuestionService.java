@@ -20,12 +20,12 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-//业务层调用持久层，取得数据，分别从两个表里取得个人数据，拿到所有数据返回.
+//业务层调用持久层，取得数据，分别从两个表里取得全部论文数据，拿到所有数据返回.
     public PaginationDTO list(Integer page, Integer size) {
 
-        PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = questionMapper.count();
         Integer totalPage;
+//        求得总页数并进行越界处理
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
@@ -37,13 +37,14 @@ public class QuestionService {
         if (page > totalPage) {
             page = totalPage;
         }
-
+//        页面对象参数设置，逻辑处理。
+        PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setPagination(totalPage,page);
 //        求得当前页码
         Integer offset =size*(page-1);
         List<Question> questions =  questionMapper.list(offset,size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-
+//遍历取得数据
         for(Question question:questions){
             User user=userMapper.findById(question.getCreator());
 //          把所有的list对象放到DTO对象中。返回的是DTO的一个list对象
@@ -55,7 +56,7 @@ public class QuestionService {
         paginationDTO.setQuestions(questionDTOList);
         return paginationDTO;
     }
-
+//根据id取得个人数据
     public PaginationDTO list(Integer id, Integer page, Integer size) {
 
         Integer totalPage;
@@ -79,7 +80,7 @@ public class QuestionService {
         Integer offset =size*(page-1);
         List<Question> questions =  questionMapper.listById(id,offset,size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-
+//遍历取得数据，根据问题的创建者，与创建者id关联.
         for(Question question:questions){
             User user=userMapper.findById(question.getCreator());
 //          把所有的list对象放到DTO对象中。返回的是DTO的一个list对象
@@ -92,5 +93,14 @@ public class QuestionService {
         paginationDTO.setQuestions(questionDTOList);
         return paginationDTO;
 
+    }
+//根据id获取当前问题
+    public QuestionDTO getByID(Integer id) {
+        Question question = questionMapper.getByID(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        User user=userMapper.findById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }

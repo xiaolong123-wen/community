@@ -2,9 +2,9 @@ package com.majiang.community.controller;
 
 import com.majiang.community.dto.AccessTokenDto;
 import com.majiang.community.dto.GithubUser;
-import com.majiang.community.mapper.UserMapper;
 import com.majiang.community.model.User;
 import com.majiang.community.provider.GithubProvider;
+import com.majiang.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 //原理时spring启动的时候,回去读取properties配置文件,将k-v对读到一个map里,等到用的时候直接赋值.
     @Value("${github.client_id}")
     private  String client_id;
@@ -60,7 +60,7 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
 //            上述数据库相当于写入实物session.返回浏览器设置cookie,
             response.addCookie(new Cookie("token",token));
 //          登录成功写cookie,session
@@ -70,5 +70,16 @@ public class AuthorizeController {
 //            失败,重新登录;
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        request.getSession().removeAttribute("user");
+        Cookie cookie =new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
+
     }
 }

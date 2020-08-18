@@ -25,9 +25,6 @@ public class PublishController {
     @Autowired
     private  QuestionMapper questionMapper;
 
-    @Autowired
-    private UserMapper userMapper;
-
     @GetMapping("/publish")
     public  String publish(){
 //        model.addAttribute("tags", TagCache.get());
@@ -60,25 +57,8 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
-
-//        从cookie中获取登录用户信息。
-        Cookie[] cookies=request.getCookies();
-        User user=null;
-        if (cookies !=null){
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {  //得到了名字token
-                    String token = cookie.getValue();//获取cookie中的token.
-                    user = userMapper.findByToken(token);//使用该token在从数据库中查找到相应的user
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                        //有了银行卡cookie就能获得token,添加到session中.这里的作用是把账户信息存到里面，相当于缓存。
-//                        因此在登录页面的时候就不用再重复登陆了.
-                    }
-                    break;
-                }
-            }
-        }
-//        用户未登录情况
+        //        用户未登录情况
+        User user = (User) request.getSession().getAttribute("user");
         if (user == null){
             model.addAttribute("error","用户未登录");
             return "publish";
