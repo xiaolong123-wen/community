@@ -37,13 +37,13 @@
 
                 <!--内容-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
-                    <textarea style="display:none;" th:text="${question.description}"></textarea>
+                    <textarea  class="form-control" style="display:inline-block;" th:text="${question.description}"  cols="30" rows="10"></textarea>
                 </div>
-                <script type="text/javascript">
-                    $(function () {
-                        editormd.markdownToHTML("question-view", {});
-                    });
-                </script>
+<!--                <script type="text/javascript">-->
+<!--                    $(function () {-->
+<!--                        editormd.markdownToHTML("question-view", {});-->
+<!--                    });-->
+<!--                </script>-->
 <!--                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"-->
 <!--                     th:if="${!#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('FOOTER'))}"-->
 <!--                     th:each="ad : ${#httpServletRequest.getServletContext().getAttribute('FOOTER')}">-->
@@ -78,7 +78,7 @@
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <a th:href="@{'/publish/'+${question.id}}" class="community-menu"
-                       th:if="${session.user != null && session.user.id == question.creator}">
+                       th:if="${session.user != null && session.user.getId() == question.creator}">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
                     </a>
                 </div>
@@ -192,6 +192,6 @@
         </div>
     </div>
 </div>
-<div th:insert="~{footer :: foot}"></div>
+<!--<div th:insert="~{footer :: foot}"></div>-->
 </body>
 </html>

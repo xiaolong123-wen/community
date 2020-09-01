@@ -1,9 +1,11 @@
 package com.majiang.community.controller;
 
+import com.majiang.community.dto.QuestionDTO;
 import com.majiang.community.mapper.QuestionMapper;
 import com.majiang.community.mapper.UserMapper;
 import com.majiang.community.model.Question;
 import com.majiang.community.model.User;
+import com.majiang.community.service.QuestionService;
 import org.apache.catalina.mbeans.UserMBean;
 import org.apache.commons.lang3.StringUtils;
 import org.h2.api.UserToRolesMapper;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,14 +26,26 @@ import java.rmi.MarshalledObject;
 public class PublishController {
 
     @Autowired
-    private  QuestionMapper questionMapper;
+    private QuestionService questionService;
 
+//编辑跳转获取参数
+    @GetMapping("/publish/{id}")
+    public String editor(@PathVariable(name = "id") Long id,Model model){
+        QuestionDTO question = questionService.getById(id);
+        model.addAttribute("title" ,question.getTitle());
+        model.addAttribute("description",question.getDescription());
+        model.addAttribute("tag",question.getTag());
+        model.addAttribute("id",question.getId());
+        return "/publish";
+
+    }
+//点击发布跳转
     @GetMapping("/publish")
     public  String publish(){
 //        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
-
+//发布页面接收参数
     @PostMapping("/publish")
     public  String doPublish(
 //            这里对应前端页面中的输入的信息，提交后在这获取去这三个参数。
@@ -69,9 +84,9 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-//        question.setId(id);
-        questionMapper.create(question);
-//        model.addAttribute("保存成功！！！");
+        question.setId(id);
+//        调用业务层,逻辑判断是否添加过问题
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }

@@ -2,8 +2,6 @@ package com.majiang.community.controller;
 
 
 import com.majiang.community.dto.PaginationDTO;
-import com.majiang.community.mapper.UserMapper;
-import com.majiang.community.model.User;
 import com.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /*通篇阅读文档即可了解使用的整个过程，spirng官网。
