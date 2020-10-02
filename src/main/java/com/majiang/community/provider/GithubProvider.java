@@ -5,7 +5,6 @@ import com.majiang.community.dto.AccessTokenDto;
 import com.majiang.community.dto.GithubUser;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 
 //使用这个注解,初始化后spring容器中的上下文,不需要实例化对象.
@@ -16,12 +15,12 @@ public class GithubProvider {
     public  String getAccessToken(AccessTokenDto accessTokenDto){
         MediaType mediaType= MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-            RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDto));
-            Request request = new Request.Builder()
+        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDto));
+        Request request = new Request.Builder()
                     .url("https://github.com/login/oauth/access_token")
                     .post(body)
                     .build();
-            try (Response response = client.newCall(request).execute()) {
+        try (Response response = client.newCall(request).execute()) {
                 String string= response.body().string();
 //                这里时执行登录请求后返回给我们了一个token字符串,分隔得到我们的accesstoken验证.
                 String token= string.split("&")[0].split("=")[1];
